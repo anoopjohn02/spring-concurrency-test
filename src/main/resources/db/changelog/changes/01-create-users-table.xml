@@ -11,10 +11,10 @@
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_user"/>
             </column>
             <column name="name" type="VARCHAR(100)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="role" type="VARCHAR(200)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
@@ -22,23 +22,28 @@
 
     <!-- Insert dummy data -->
     <changeSet id="2-insert-dummy-users" author="anoop">
-        <insert tableName="user">
+        <insert tableName="users">
+            <column name="id" value="1"/>
             <column name="name" value="User 1"/>
             <column name="role" value="developer"/>
         </insert>
-        <insert tableName="user">
+        <insert tableName="users">
+            <column name="id" value="2"/>
             <column name="name" value="User 2"/>
             <column name="role" value="developer"/>
         </insert>
-        <insert tableName="user">
+        <insert tableName="users">
+            <column name="id" value="3"/>
             <column name="name" value="User 3"/>
             <column name="role" value="senior developer"/>
         </insert>
-        <insert tableName="user">
+        <insert tableName="users">
+            <column name="id" value="4"/>
             <column name="name" value="User 4"/>
             <column name="role" value="architect"/>
         </insert>
-        <insert tableName="user">
+        <insert tableName="users">
+            <column name="id" value="5"/>
             <column name="name" value="User 5"/>
             <column name="role" value="lead"/>
         </insert>

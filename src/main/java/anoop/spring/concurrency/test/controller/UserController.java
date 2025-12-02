@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/{version}/users", version = "1")
+//@RequestMapping(path = "api/{version}/users", version = "1") // Spring Boot 4 feature
+@RequestMapping("api/v1/users")
 public class UserController {
 
     @Autowired
