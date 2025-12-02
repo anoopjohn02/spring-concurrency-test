@@ -52,7 +52,13 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <!-- <version>5.0.0</version>!-->
+        </dependency>
+
+        <!-- lombok !-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.42</version>
         </dependency>
 
         <!-- Tests !-->
