@@ -1,0 +1,46 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.12.xsd">
+
+    <!-- Create user table (H2-compatible) -->
+    <changeSet id="1-create-user-table" author="anoop">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT AUTO_INCREMENT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_user"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="role" type="VARCHAR(200)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Insert dummy data -->
+    <changeSet id="2-insert-dummy-users" author="anoop">
+        <insert tableName="user">
+            <column name="name" value="User 1"/>
+            <column name="role" value="developer"/>
+        </insert>
+        <insert tableName="user">
+            <column name="name" value="User 2"/>
+            <column name="role" value="developer"/>
+        </insert>
+        <insert tableName="user">
+            <column name="name" value="User 3"/>
+            <column name="role" value="senior developer"/>
+        </insert>
+        <insert tableName="user">
+            <column name="name" value="User 4"/>
+            <column name="role" value="architect"/>
+        </insert>
+        <insert tableName="user">
+            <column name="name" value="User 5"/>
+            <column name="role" value="lead"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
