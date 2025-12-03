@@ -1,0 +1,67 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.12.xsd">
+
+    <!-- Create user table (H2-compatible) -->
+    <changeSet id="2-create-user-address-table" author="anoop">
+        <createTable tableName="addresses">
+            <column name="id" type="BIGINT AUTO_INCREMENT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_address"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="address" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pin_code" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Insert dummy data -->
+    <changeSet id="2-insert-dummy-addresses" author="anoop">
+        <insert tableName="addresses">
+            <column name="id" value="1"/>
+            <column name="user_id" value="1"/>
+            <column name="address" value="address 1"/>
+            <column name="country" value="IN"/>
+            <column name="pin_code" value="1234"/>
+        </insert>
+        <insert tableName="addresses">
+            <column name="id" value="2"/>
+            <column name="user_id" value="2"/>
+            <column name="address" value="address 2"/>
+            <column name="country" value="DE"/>
+            <column name="pin_code" value="4321"/>
+        </insert>
+        <insert tableName="addresses">
+            <column name="id" value="3"/>
+            <column name="user_id" value="3"/>
+            <column name="address" value="address 3"/>
+            <column name="country" value="SE"/>
+            <column name="pin_code" value="2222"/>
+        </insert>
+        <insert tableName="addresses">
+            <column name="id" value="4"/>
+            <column name="user_id" value="4"/>
+            <column name="address" value="address 4"/>
+            <column name="country" value="ES"/>
+            <column name="pin_code" value="swe123"/>
+        </insert>
+        <insert tableName="addresses">
+            <column name="id" value="5"/>
+            <column name="user_id" value="5"/>
+            <column name="address" value="address 5"/>
+            <column name="country" value="IN"/>
+            <column name="pin_code" value="3344"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
