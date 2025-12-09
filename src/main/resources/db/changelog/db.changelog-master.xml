@@ -6,4 +6,6 @@
 
     <include file="db/changelog/changes/01-create-users-table.xml"/>
     <include file="db/changelog/changes/02-create-users-address-table.xml"/>
+    <include file="db/changelog/changes/03-create-users-photos-table.xml"/>
+    <include file="db/changelog/changes/04-create-users-posts-table.xml"/>
 </databaseChangeLog>
