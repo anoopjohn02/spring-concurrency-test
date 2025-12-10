@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.StructuredTaskScope;
 
 @Service
 public class UserService {
@@ -70,6 +71,7 @@ public class UserService {
     }
 
     public UserDetails getUserDetailsParallelly(int id) {
+        // Fetch more user details parallelly using virtual threads
         ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
         try (executor) {
             Future<UserEntity> userEntityFuture = executor.submit(() -> userRepository.findById(id).orElseThrow());
@@ -83,6 +85,32 @@ public class UserService {
             AddressEntity addressEntity = addressEntityFuture.get();
             List<Photo> photos = photosFuture.get();
             List<Post> posts = postsFuture.get();
+            return new UserDetails(userEntity.getName(), userEntity.getRole(),
+                    toAddress(addressEntity), photos, posts);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public UserDetails getUserDetailsUsingStructuredConcurrency(int id) {
+        // Fetch user details parallelly using Structured Concurrency. If one fail everything will be failed.
+        // Note: Since it is a preview feature not recommended for production now.
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+            var userEntityFuture = scope.fork(() -> userRepository.findById(id).orElseThrow());
+            var addressEntityFuture   = scope.fork(() -> addressRepository.findByUserId(id));
+            var photosFuture     = scope.fork(() -> photoRepository.findByUserId(id)
+                    .stream().map(this::toPhoto).toList());
+            var postsFuture     = scope.fork(() -> postRepository.findByUserId(id)
+                    .stream().map(this::toPost).toList());
+
+            scope.join();          // wait for all
+            scope.throwIfFailed(); // throw if any failed
+
+            UserEntity userEntity = userEntityFuture.get();
+            AddressEntity addressEntity = addressEntityFuture.get();
+            List<Photo> photos = photosFuture.get();
+            List<Post> posts = postsFuture.get();
+
             return new UserDetails(userEntity.getName(), userEntity.getRole(),
                     toAddress(addressEntity), photos, posts);
         } catch (Exception e) {

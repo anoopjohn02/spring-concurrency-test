@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("v1/users")
@@ -26,7 +28,7 @@ public class UserController {
     public Response<List<User>> getAllUsers(
             @RequestParam(required = false, defaultValue = "true") boolean parallel
     ) {
-        Instant start = Instant.now();
+        LocalDateTime start = LocalDateTime.now();
         List<User> users;
         if (parallel) {
             users = userService.getAllUsersParallelly();
@@ -41,7 +43,7 @@ public class UserController {
             @PathVariable(name = "id") int id,
             @RequestParam(required = false, defaultValue = "true") boolean parallel
     ) {
-        Instant start = Instant.now();
+        LocalDateTime start = LocalDateTime.now();
         UserDetails userDetails;
         if (parallel) {
             userDetails = userService.getUserDetailsParallelly(id);
@@ -51,9 +53,18 @@ public class UserController {
         return new Response<>(userDetails, timeInString(start), parallel);
     }
 
-    private String timeInString(Instant start) {
-        Instant end = Instant.now();
-        int timeInMillis = (int) Duration.between(start, end).getSeconds() * 1000;
+    @GetMapping("/{id}/structured")
+    public Response<UserDetails> getUserDetailsByStructuredConcurrency(
+            @PathVariable(name = "id") int id
+    ) {
+        LocalDateTime start = LocalDateTime.now();
+        UserDetails userDetails = userService.getUserDetailsUsingStructuredConcurrency(id);
+        return new Response<>(userDetails, timeInString(start), true);
+    }
+
+    private String timeInString(LocalDateTime start) {
+        LocalDateTime end = LocalDateTime.now();
+        long timeInMillis = TimeUnit.NANOSECONDS.toMillis(Duration.between(start, end).toNanos());
         return timeInMillis + " ms";
     }
 }
